@@ -1,0 +1,85 @@
+BioShell Lab 0.2 — 生物科研 Linux 学习工作台
+制作日期：2026-11-23
+
+一、开始使用
+双击 BioShellLab.exe 即可启动。无需安装 Python、Node.js、WSL 或 Linux。
+适用环境：Windows 10/11 的 x64 系统，需具备 .NET Framework 4.7.2 或更高版本，
+以及 Microsoft Edge WebView2 Runtime。本机已验证 WebView2 能正常加载学习界面。
+本程序以单个 exe 分发，内含页面、中文课程和 WebView2 SDK 组件，
+不包含 WebView2 浏览器运行时本身。缺少运行时的其他电脑需先安装微软官方运行时：
+https://developer.microsoft.com/microsoft-edge/webview2/
+
+二、如何学习
+1. 左侧选择课程；首次从“我现在在哪里？”开始。
+2. 中间阅读讲解、命令示例和本关任务。
+3. 在右侧终端底部输入命令，按 Enter 执行，不需要输入 $ 提示符。
+4. 系统根据执行效果和模拟文件内容自动判题，成功后解锁下一关。
+5. “提示”显示当前任务的做法；“填入终端”只填入示例的第一条命令，仍需自行执行。
+6. “重置本关”恢复本关的示例文件，不清除已完成的课程记录。
+7. “自由实验台”不限制任务目标，也不修改课程进度。
+8. “文件目录”展示当前模拟文件；“学习资料”打开外部教程和命令速查。
+
+快捷键：Enter 执行；上下键浏览历史；Tab 尝试补全唯一匹配的路径；
+Ctrl+L 聚焦命令输入框；Esc 关闭资料窗口。
+
+三、课程结构（18 关）
+认识目录（5 关）：pwd、ls、cd、ll / ls -l、相对路径与上一级目录。
+查看生物数据（5 关）：cat、head、tail、wc -l、grep。
+整理分析文件（4 关）：mkdir、cp、mv、rm。
+组合命令（3 关）：管道、输出重定向、find。
+综合小实验（1 关）：建立对照组交付目录、备份样本表并保存筛选结果。
+
+四、模拟环境的范围
+这是入门教学原型，模拟 Linux 的常用命令子集，并非真实 Linux 或完整 Bash。
+所有 FASTQ、样本表和文件属性均为虚构的教学示例。
+支持：目录导航、文本查看、筛选计数、文件整理、管道、> / >>、引号和部分参数。
+通配符只在 find -name 中匹配；不进行通用文件名展开。
+grep 仅模拟常用匹配形式，底层正则语法与 GNU grep 并不完全相同。
+不支持：环境变量、Shell 脚本、循环、网络命令、sudo、软件安装、
+压缩测序文件的处理、真实生信工具及递归复制/删除。
+ll 预设为 ls -l 的别名，真实服务器是否提供 ll 取决于其配置。
+模拟文件在重置、切换课程或关闭程序后重新生成；只保存课程完成记录。
+
+五、离线与数据保存
+内置中文课程、命令练习和判题均在本机运行，不需要账号和在线服务。
+外部资料通过系统默认浏览器打开，需要联网。
+课程完成记录：%LOCALAPPDATA%\BioShellLab\progress-v1.txt
+程序会在同一 BioShellLab 文件夹内解出页面、SDK 加载器和浏览器缓存。
+不读取或修改真实研究文件，rm 等练习只操作内存中的模拟文件。
+
+六、开发与源码
+源码目录中的 build-desktop.ps1 构建当前网页界面版 Windows x64 exe。
+在 PowerShell 中进入源码目录，执行：
+  powershell -ExecutionPolicy Bypass -File .\build-desktop.ps1
+默认生成 BioShellLab-Studio.exe；可通过 -OutputPath 指定其他输出文件名。
+需要 Windows 自带 .NET Framework C# 编译器，无需在线下载构建依赖。
+vendor 中附带 Microsoft.Web.WebView2 1.0.4314.35 所需的 .NET 与 x64 加载器。
+第三方许可参见 vendor/LICENSE.txt。
+
+Engine.cs：内存文件系统、命令解析、执行和 18 关课程与判题规则。
+Desktop.cs：桌面窗口、嵌入 WebView2、界面通信、进度持久化。
+studio.html：界面布局、样式、键盘交互和消息处理。
+Tests.cs：命令引擎与全部关卡的自动检查。
+bioshell.ico：程序图标。
+
+运行自动检查：
+  BioShellLab.exe --self-test
+会在 exe 所在目录生成 self-test-result.txt，成功时退出码为 0。
+目前通过 79 项断言，覆盖所有关卡解答、管道、重定向、文件操作和错误情况。
+--qa 使用 exe 所在目录下隔离的测试数据，不污染普通学习进度。
+
+七、后续项目迭代方向
+当前版本优先让没有计算机基础的研究者理解目录、文件和命令组合。
+后续可将课程拆成可编辑的数据包，增加错题复习、章节测验和教师自定义任务。
+入门内容稳定后，再增加 WSL 或容器中的真实 Linux 练习模式，
+逐步引入压缩 FASTQ、FASTA、cut/sort/uniq、Shell 脚本和真实生信工具。
+真实执行模式需要单独设计环境隔离、资源限制和重置机制。
+
+八、学习资料
+程序内的中文讲解与虚构示例为本项目编写；以下为外部扩展资料链接，未整站复制。
+Data Carpentry — Introduction to the Command Line for Genomics：
+https://datacarpentry.github.io/shell-genomics/
+Software Carpentry — The Unix Shell：
+https://swcarpentry.github.io/shell-novice/
+GNU Coreutils 官方手册：
+https://www.gnu.org/software/coreutils/manual/html_node/

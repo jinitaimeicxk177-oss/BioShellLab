@@ -1,0 +1,13 @@
+qa-data/
+runtime-*/
+browser/
+ui-v*/
+progress-v1.txt*
+self-test-result.txt
+startup-error.txt
+diagnostics.txt
+*.tmp
+BioShellLab-Studio.exe
+.vs/
+bin/
+obj/
